@@ -5,7 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private float speed;
+    [SerializeField] private float maxSpeed = 5;
+    [SerializeField] private float acceleration = 2;
     [SerializeField] private float jumpStrength = 5;
     public float JumpStrength { get { return JumpStrength; } set { JumpStrength = value; } }
     [SerializeField] private LayerMask groundLayer;
@@ -22,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         float xMovement = Input.GetAxis("Horizontal"); // Store recorded input on the X axis
-        Vector2 movement = new Vector2(xMovement * speed, 0); // Convert into Vector2
+        Vector2 movement = new Vector2(xMovement * acceleration, 0); // Convert into Vector2
 
         if (xMovement != 0) // If there is input detected...
         {
@@ -64,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // Overrides the players velocity if it is below the minimum, or above the maximum threshhold
         // Note: Negative values are used for the minimum as when traversing left along the X axis, velocity is negative to go 'backwards'
-        rigidBody.velocity = new Vector2(Mathf.Clamp(rigidBody.velocity.x, -10, 10), Mathf.Clamp(rigidBody.velocity.y, -10, 10));
+        rigidBody.velocity = new Vector2(Mathf.Clamp(rigidBody.velocity.x, -maxSpeed, maxSpeed), Mathf.Clamp(rigidBody.velocity.y, -maxSpeed * 3, maxSpeed * 3));
     }
 
     /// <summary>
@@ -74,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
     {
         RaycastHit2D hit; // Variable to store reference of what the raycast hits
         hit = Physics2D.Raycast(transform.position, Vector2.down, jumpRaycastLength, groundLayer); // Raycast downwards from centre of the player checking if we are above any objects on the ground layer.
-        Debug.DrawRay(transform.position, Vector2.down * jumpRaycastLength, Color.green, 0.5f); // Draw the ray inside of the scene editor only
+        Debug.DrawRay(transform.position, Vector2.down * jumpRaycastLength, Color.green, 0.5f); // Draw the ray inside of the scene editor only for a limited time
 
         if (hit.collider != null) // If we hit something...
         {
