@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     private GameObject player;
+    [SerializeField] private float transitionSpeed = 3;
 
     // Start is called before the first frame update
     void Start()
@@ -13,8 +14,14 @@ public class CameraFollow : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
-        transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
+        transform.position = LerpToPosition(player.transform.position);
+        transform.position = new Vector3(transform.position.x, transform.position.y, -10);        
+    }
+
+    private Vector2 LerpToPosition(Vector2 newPosition)
+    {
+        return Vector2.Lerp(transform.position, newPosition, transitionSpeed * Time.deltaTime);
     }
 }
