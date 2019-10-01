@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float maxSpeed = 5;
     [SerializeField] private float acceleration = 2;
@@ -20,13 +20,22 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         float xMovement = Input.GetAxis("Horizontal"); // Store recorded input on the X axis
         Vector2 movement = new Vector2(xMovement * acceleration, 0); // Convert into Vector2
 
         if (xMovement != 0) // If there is input detected...
         {
+            if (xMovement > 0)
+            {
+                transform.rotation = new Quaternion(0, 180, 0, 0);
+            }
+            else if (xMovement < 0)
+            {
+                transform.rotation = new Quaternion(0, 0, 0, 0);
+            }
+
             rigidBody.AddForce(movement, ForceMode2D.Impulse); // Add force in the given direction
         }
         else // Otherwise if there is no input detected...
@@ -38,11 +47,7 @@ public class PlayerMovement : MonoBehaviour
         {
             Jump();
         }
-    }
 
-    // LateUpdate is called immediately after Update
-    private void LateUpdate()
-    {
         ClampVelocity();
     }
 
@@ -84,6 +89,31 @@ public class PlayerMovement : MonoBehaviour
         else // Otherwise if we did not...
         {
             return false; // Return false, we are not grounded
+        }
+    }
+
+    private void Die()
+    {
+        // TBD
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.GetComponent<NPC>())
+        {
+            NPC NPCSquished = collision.gameObject.GetComponent<NPC>();
+            NPCSquished.Die();
+
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0);
+            rigidBody.AddForce(new Vector2(0, jumpStrength), ForceMode2D.Impulse);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.GetComponent<NPC>())
+        {
+            Die();
         }
     }
 }
