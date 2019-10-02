@@ -9,9 +9,6 @@ public class GameManager : MonoBehaviour
     public enum Difficulty { Normal, Masochist }
     public Difficulty difficultySetting { get; set; }
 
-    public delegate void OnCheckpointReached(float yPosition);
-    public OnCheckpointReached OnCheckpointReachedCallback;
-
     private void Awake()
     {
         if (instance == null)
@@ -22,17 +19,5 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this);
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

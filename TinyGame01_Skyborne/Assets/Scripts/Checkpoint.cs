@@ -26,7 +26,6 @@ public class Checkpoint : MonoBehaviour
     public void PassedCheckpoint()
     {
         tar.Speed += tarSpeedIncrease;
-        GameManager.instance.OnCheckpointReachedCallback.Invoke(transform.position.y);
         gameObject.SetActive(false);
     }
 }
