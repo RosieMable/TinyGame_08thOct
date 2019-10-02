@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
@@ -8,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxSpeed = 5;
     [SerializeField] private float acceleration = 2;
     [SerializeField] private float jumpStrength = 5;
+    private float jumpDelay = 0;
+    [SerializeField] private float jumpCooldown = 0.5f;
     public float JumpStrength { get { return JumpStrength; } set { JumpStrength = value; } }
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float jumpRaycastLength = 1;
@@ -43,12 +46,21 @@ public class PlayerController : MonoBehaviour
             rigidBody.velocity = new Vector2(0, rigidBody.velocity.y);
         }
 
+        ClampVelocity();
+    }
+
+    private void Update()
+    {
+
+
         if (Input.GetKeyDown(KeyCode.Space)) // If the player presses the spacebar...
         {
-            Jump();
+            if (Time.time > jumpDelay)
+            {
+                jumpDelay = Time.time + jumpCooldown;
+                Jump();
+            }
         }
-
-        ClampVelocity();
     }
 
     /// <summary>
@@ -70,7 +82,7 @@ public class PlayerController : MonoBehaviour
     {
         // Overrides the players velocity if it is below the minimum, or above the maximum threshhold
         // Note: Negative values are used for the minimum as when traversing left along the X axis, velocity is negative to go 'backwards'
-        rigidBody.velocity = new Vector2(Mathf.Clamp(rigidBody.velocity.x, -maxSpeed, maxSpeed), Mathf.Clamp(rigidBody.velocity.y, -maxSpeed * 3, maxSpeed * 3));
+        rigidBody.velocity = new Vector2(Mathf.Clamp(rigidBody.velocity.x, -maxSpeed, maxSpeed), Mathf.Clamp(rigidBody.velocity.y, -maxSpeed * 1.6f, maxSpeed * 1.6f));
     }
 
     /// <summary>
@@ -95,6 +107,7 @@ public class PlayerController : MonoBehaviour
     private void Die()
     {
         // TBD
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -106,6 +119,11 @@ public class PlayerController : MonoBehaviour
 
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0);
             rigidBody.AddForce(new Vector2(0, jumpStrength), ForceMode2D.Impulse);
+        }
+
+        if (collision.gameObject.GetComponent<Tar>())
+        {
+            Die();
         }
     }
 
