@@ -12,17 +12,20 @@ public class Tar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = FindObjectOfType<PlayerController>().gameObject; // Finds reference to the player through finding which gameObject has the 'PlayerMovement' class attached. 
+        player = FindObjectOfType<PlayerController>().gameObject; // Finds reference to the player through finding which gameObject has the 'PlayerController' class attached. 
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position += Vector3.up * speed * Time.deltaTime;
-        transform.position = new Vector3(ReturnLerpedPosition(transform.position.x, player.transform.position.x), transform.position.y, -1);
+        transform.position += Vector3.up * speed * Time.deltaTime; // Move upwards based on speed
+        transform.position = new Vector3(ReturnLerpedValue(transform.position.x, player.transform.position.x), transform.position.y, -1); // Lerp to the players x position, to ensure that the tar is always beneath them
     }
 
-    private float ReturnLerpedPosition(float currentPosition, float newPosition)
+    /// <summary>
+    /// Returns the lerped value based on transitionSpeed
+    /// </summary>
+    private float ReturnLerpedValue(float currentPosition, float newPosition)
     {
         return Mathf.Lerp(currentPosition, newPosition, transitionSpeed * Time.deltaTime);
     }

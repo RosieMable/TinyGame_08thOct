@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     // Awake is called before the object is drawn to the screen, runs before Start
     private void Awake()
     {
-        rigidBody = GetComponent<Rigidbody2D>();
+        rigidBody = GetComponent<Rigidbody2D>(); // Store reference
     }
 
     // Update is called once per frame
@@ -30,32 +30,32 @@ public class PlayerController : MonoBehaviour
 
         if (xMovement != 0) // If there is input detected...
         {
-            if (xMovement > 0)
+            if (xMovement > 0) // If we are moving towards the right...
             {
-                transform.rotation = new Quaternion(0, 180, 0, 0);
+                transform.rotation = new Quaternion(0, 180, 0, 0); // Rotate object to face right
             }
-            else if (xMovement < 0)
+            else if (xMovement < 0) // Else if we are moving left...
             {
-                transform.rotation = new Quaternion(0, 0, 0, 0);
+                transform.rotation = new Quaternion(0, 0, 0, 0); // Rotate object to face left (default)
             }
 
             rigidBody.AddForce(movement, ForceMode2D.Impulse); // Add force in the given direction
         }
         else // Otherwise if there is no input detected...
         {
-            rigidBody.velocity = new Vector2(0, rigidBody.velocity.y);
+            rigidBody.velocity = new Vector2(0, rigidBody.velocity.y); // Reset X velocity but maintain Y velocity incase the player is mid jump or falling
         }
 
-        ClampVelocity();
+        ClampVelocity(); // Clamp velocity after any physics movement has occured to ensure velocity stays within bounds
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space)) // If the player presses the spacebar...
         {
-            if (Time.time > jumpDelay)
+            if (Time.time > jumpDelay) // Check if enough time has passed for another jump...
             {
-                jumpDelay = Time.time + jumpCooldown;
+                jumpDelay = Time.time + jumpCooldown; // Put jump on cooldown
                 Jump();
             }
         }
@@ -111,16 +111,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.GetComponent<NPC>())
+        if (collision.gameObject.GetComponent<NPC>()) // If the trigger area is an NPC...
         {
-            NPC NPCSquished = collision.gameObject.GetComponent<NPC>();
-            NPCSquished.Die();
+            NPC NPCSquished = collision.gameObject.GetComponent<NPC>(); // Store reference to NPC
+            NPCSquished.Die(); // Call Die method from NPC
 
-            rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0);
-            rigidBody.AddForce(new Vector2(0, jumpStrength), ForceMode2D.Impulse);
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0); // Reset y velocity
+            rigidBody.AddForce(new Vector2(0, jumpStrength), ForceMode2D.Impulse); // Boost player upwards
         }
 
-        if (collision.gameObject.GetComponent<Tar>())
+        if (collision.gameObject.GetComponent<Tar>()) // If the trigger area is the Tar...
         {
             Die();
         }
@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.GetComponent<NPC>())
+        if (collision.gameObject.GetComponent<NPC>()) // If the collision is with an NPC...
         {
             Die();
         }
