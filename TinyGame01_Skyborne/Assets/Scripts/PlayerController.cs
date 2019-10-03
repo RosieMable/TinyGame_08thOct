@@ -51,8 +51,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-
-
         if (Input.GetKeyDown(KeyCode.Space)) // If the player presses the spacebar...
         {
             if (Time.time > jumpDelay)
@@ -91,7 +89,8 @@ public class PlayerController : MonoBehaviour
     private bool IsGrounded()
     {
         RaycastHit2D hit; // Variable to store reference of what the raycast hits
-        hit = Physics2D.Raycast(transform.position, Vector2.down, jumpRaycastLength, groundLayer); // Raycast downwards from centre of the player checking if we are above any objects on the ground layer.
+        //hit = Physics2D.Raycast(transform.position, Vector2.down, jumpRaycastLength, groundLayer); // Raycast downwards from centre of the player checking if we are above any objects on the ground layer.
+        hit = Physics2D.BoxCast(transform.position, new Vector2(0.5f, 0.5f), 0, Vector2.down, jumpRaycastLength, groundLayer);
         Debug.DrawRay(transform.position, Vector2.down * jumpRaycastLength, Color.green, 0.5f); // Draw the ray inside of the scene editor only for a limited time
 
         if (hit.collider != null) // If we hit something...
