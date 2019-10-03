@@ -22,14 +22,16 @@ public abstract class NPC : MonoBehaviour
         xMovementDirection = Vector2.left;
     }
 
+    // FixedUpdate is called every Physics update (Slower than Update)
     private void FixedUpdate()
     {
-        if (!isStatic)
+        if (!isStatic) // If the NPC is not intended to be static...
         {
-            if (patrolPoints.Count != 0)
+            if (patrolPoints.Count != 0) // If there are any patrol points...
             {
                 Patrol();
             }
+
             Move();
         }        
     }
@@ -44,19 +46,19 @@ public abstract class NPC : MonoBehaviour
 
     protected virtual void Move()
     {
-        if (directionOfMovement == 1) // Right
+        if (directionOfMovement == 1) // Rightwards movement
         {
-            xMovementDirection = Vector2.right;
-            transform.rotation = new Quaternion(transform.rotation.x, 180, 0, 0);
+            xMovementDirection = Vector2.right; // Record movement vector
+            transform.rotation = new Quaternion(transform.rotation.x, 180, 0, 0); // Rotate NPC to match movement
         }
-        else if (directionOfMovement == -1) // Left
+        else if (directionOfMovement == -1) // Leftwards movement
         {
-            xMovementDirection = Vector2.left;
-            transform.rotation = new Quaternion(transform.rotation.x, 0, 0, 0);
+            xMovementDirection = Vector2.left; // Record movement vector
+            transform.rotation = new Quaternion(transform.rotation.x, 0, 0, 0); // Rotate NPC to match movement
         }
 
-        rigidBody.AddForce(xMovementDirection * acceleration, ForceMode2D.Impulse);
-        ClampVelocity();
+        rigidBody.AddForce(xMovementDirection * acceleration, ForceMode2D.Impulse); // Apply force in the direction of the movement vector
+        ClampVelocity(); // Clap velocity after any movement to ensure it stays withing bounds
     }
 
     /// <summary>
@@ -69,29 +71,33 @@ public abstract class NPC : MonoBehaviour
         rigidBody.velocity = new Vector2(Mathf.Clamp(rigidBody.velocity.x, -maxSpeed, maxSpeed), Mathf.Clamp(rigidBody.velocity.y, -maxSpeed, maxSpeed));
     }
 
+
+    /// <summary>
+    /// Has the NPC patrol in order between all patrolPoints assigned
+    /// </summary>
     protected virtual void Patrol()
     {
-        if (patrolPoints.Count > 0)
+        if (patrolPoints.Count > 0) // If there are any patrol points...
         {
-            float xDistanceFromPoint = patrolPoints[patrolPointIndex].position.x - transform.position.x;
+            float xDistanceFromPoint = patrolPoints[patrolPointIndex].position.x - transform.position.x; // Calculate and store distance to current patrol point
 
-            if (Mathf.Abs(xDistanceFromPoint) < 1)
+            if (Mathf.Abs(xDistanceFromPoint) < 1) // If the NPC gets within close distance of the patrol point...
             {
-                if (patrolPointIndex + 1 > patrolPoints.Count - 1)
+                if (patrolPointIndex + 1 > patrolPoints.Count - 1) // If there no more patrol points after this one...
                 {
-                    patrolPointIndex = 0;
+                    patrolPointIndex = 0; // Go back to the start
                 }
-                else
+                else // Otherwise there must be more patrol points...
                 {
-                    patrolPointIndex++;
+                    patrolPointIndex++; // Look at the next patrol point
                 }
             }
 
-            if (xDistanceFromPoint < 0)
+            if (xDistanceFromPoint < 0) // If the calculated distance shows the point is on the left (negative value)
             {
                 directionOfMovement = -1; // Point is on the left so set directionOfMovement to match
             }
-            else
+            else // Otherwise the calculated distance shows that the point is on the right (positive value)
             {
                 directionOfMovement = 1; // Point is on the right so set directionOfMovement to match
             }

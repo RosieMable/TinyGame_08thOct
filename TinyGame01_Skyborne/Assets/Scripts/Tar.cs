@@ -8,47 +8,25 @@ public class Tar : MonoBehaviour
     public float Speed { get { return speed; } set { speed = value; } }
     private GameObject player;
     [SerializeField] private float transitionSpeed = 3;
-    private bool movingToCheckpoint = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = FindObjectOfType<PlayerController>().gameObject; // Finds reference to the player through finding which gameObject has the 'PlayerMovement' class attached. 
-        GameManager.instance.OnCheckpointReachedCallback += MoveOnCheckpointReached;
+        player = FindObjectOfType<PlayerController>().gameObject; // Finds reference to the player through finding which gameObject has the 'PlayerController' class attached. 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!movingToCheckpoint)
-        {
-            transform.position += Vector3.up * speed * Time.deltaTime;
-            transform.position = new Vector3(LerpToXPosition(player.transform.position.x), transform.position.y, -1);
-        }
+        transform.position += Vector3.up * speed * Time.deltaTime; // Move upwards based on speed
+        transform.position = new Vector3(ReturnLerpedValue(transform.position.x, player.transform.position.x), transform.position.y, -1); // Lerp to the players x position, to ensure that the tar is always beneath them
     }
 
-    private void MoveOnCheckpointReached(float desiredYPosition)
+    /// <summary>
+    /// Returns the lerped value based on transitionSpeed
+    /// </summary>
+    private float ReturnLerpedValue(float currentPosition, float newPosition)
     {
-        StartCoroutine(MoveToCheckpoint(desiredYPosition, 5));
-    }
-
-    private float LerpToXPosition(float newPosition)
-    {
-        return Mathf.Lerp(transform.position.x, newPosition, transitionSpeed * Time.deltaTime);
-    }
-
-    private float LerpToYPosition(float newPosition)
-    {
-        return Mathf.Lerp(transform.position.y, newPosition, transitionSpeed * Time.deltaTime);
-    }
-
-    private IEnumerator MoveToCheckpoint(float desiredYPosition, float movementLockoutTime)
-    {
-        movingToCheckpoint = true;
-        transform.position = new Vector3(transform.position.x, LerpToYPosition(desiredYPosition), -1);
-        print("Moving to" + desiredYPosition);
-        yield return new WaitForSeconds(movementLockoutTime);
-        movingToCheckpoint = false;
-        print("Done");
+        return Mathf.Lerp(currentPosition, newPosition, transitionSpeed * Time.deltaTime);
     }
 }

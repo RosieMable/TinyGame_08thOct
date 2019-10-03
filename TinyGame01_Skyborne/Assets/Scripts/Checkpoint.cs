@@ -10,14 +10,14 @@ public class Checkpoint : MonoBehaviour
 
     private void Start()
     {
-        GetComponent<SpriteRenderer>().enabled = false;
-        tar = FindObjectOfType<Tar>();
+        GetComponent<SpriteRenderer>().enabled = false; // Disable spriterender on play, allows setting up in scene view to be more intuiative        
         player = FindObjectOfType<PlayerController>().gameObject; // Finds reference to the player through finding which gameObject has the 'PlayerController' class attached. 
+        tar = FindObjectOfType<Tar>();
     }
 
     private void Update()
     {
-        if (player.transform.position.y >= transform.position.y)
+        if (player.transform.position.y >= transform.position.y) // If the player has passed the checkpoint (Is higher than its position)...
         {
             PassedCheckpoint();
         }
@@ -25,8 +25,7 @@ public class Checkpoint : MonoBehaviour
 
     public void PassedCheckpoint()
     {
-        tar.Speed += tarSpeedIncrease;
-        GameManager.instance.OnCheckpointReachedCallback.Invoke(transform.position.y);
-        gameObject.SetActive(false);
+        tar.Speed += tarSpeedIncrease; // Add onto Tar's speed
+        gameObject.SetActive(false); // Deactivate object
     }
 }

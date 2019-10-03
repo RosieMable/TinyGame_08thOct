@@ -16,10 +16,13 @@ public class CameraFollow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = LerpToPosition(player.transform.position);
-        transform.position = new Vector3(transform.position.x, transform.position.y, -10);        
+        transform.position = LerpToPosition(player.transform.position); // Lerp position to make that of the player
+        transform.position = new Vector3(transform.position.x, transform.position.y, -10);  // Set Z axis to ensure nothing is behind or on top of the camera       
     }
 
+    /// <summary>
+    /// Returns lerped Vector2 based on transitionSpeed, used for updating position of gamera
+    /// </summary>
     private Vector2 LerpToPosition(Vector2 newPosition)
     {
         return Vector2.Lerp(transform.position, newPosition, transitionSpeed * Time.deltaTime);
