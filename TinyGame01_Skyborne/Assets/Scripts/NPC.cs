@@ -113,4 +113,13 @@ public abstract class NPC : MonoBehaviour
             }
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.GetComponent<Tar>())
+        {
+            Die();
+            // Add extra scream sound here?
+        }
+    }
 }

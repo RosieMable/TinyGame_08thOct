@@ -24,12 +24,12 @@ public class GameManager : MonoBehaviour
 
     public void LevelComplete()
     {
-        // Scene transition/overlay
+        // Scene transition/UI overlay
     }
 
     public void GameOver()
     {
-        // Scene transition/overlay
+        // Scene transition/UI overlay
 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Can be removed later, used primarily for testing right now
     }
