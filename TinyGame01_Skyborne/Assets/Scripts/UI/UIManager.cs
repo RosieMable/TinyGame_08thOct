@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,17 +15,55 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] GameObject PauseMenu;
     [SerializeField] GameObject OptionsMenu;
+    [SerializeField] GameObject player;
+    [SerializeField] GameObject tar;
 
+    public CanvasGroup gameOverScreen;
+    public CanvasGroup victoryScreen;
+
+    public GameObject gameScene;
+
+    private void OnEnable()
+    {
+        GameManager.instance.OnLevelCompletecallback += OnLevelComplete;
+        GameManager.instance.OnGameOvercallback += OnGameOver;
+    }
     private void Awake()
     {
+        player = FindObjectOfType<PlayerController>().gameObject;
+        player.GetComponent<PlayerController>().enabled = false;
+        tar = FindObjectOfType<Tar>().gameObject;
+
         canvasGroup = this.GetComponentInChildren<CanvasGroup>();
         PauseMenu.SetActive(false);
         OptionsMenu.SetActive(false);
+        player.GetComponent<SpriteRenderer>().enabled = false;
+        tar.SetActive(false);
+
+        gameOverScreen.alpha = 0;
+        gameOverScreen.blocksRaycasts = false;
+        gameOverScreen.interactable = false;
+
+        victoryScreen.alpha = 0;
+        victoryScreen.blocksRaycasts = false;
+        victoryScreen.interactable = false;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+            OnPause();
+
+        if(GameManager.instance.OnGameOvercallback == null)
+            GameManager.instance.OnGameOvercallback += OnGameOver;
+
+        if(GameManager.instance.OnLevelCompletecallback == null)
+            GameManager.instance.OnLevelCompletecallback += OnLevelComplete;
     }
 
     public void OnStart()
     {
-        StartCoroutine(FadeThanDoSomething());
+        StartCoroutine(FadeThenDoSomething());
     }
 
     public void OnQuit()
@@ -48,6 +87,30 @@ public class UIManager : MonoBehaviour
         OptionsMenu.SetActive(false);
     }
 
+    public void OnGameOver()
+    {
+        gameOverScreen.blocksRaycasts = true;
+        gameOverScreen.interactable = true;
+        StartCoroutine(FadeCanvas(gameOverScreen, 0, 1, 0.6f));
+        gameScene.SetActive(false);
+
+    }
+
+    public void OnLevelComplete()
+    {
+        victoryScreen.blocksRaycasts = true;
+        victoryScreen.interactable = true;
+        StartCoroutine(FadeCanvas(victoryScreen, 0, 1, 0.6f));
+        gameScene.SetActive(false);
+    }
+
+    public void OnRetry()
+    {
+        //Application.LoadLevel(Application.loadedLevel); // - This is deprecated 
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        player.GetComponent<PlayerController>().enabled = false;
+    }
+
     void PauseGame()
     {
         if (paused == false)
@@ -62,11 +125,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    IEnumerator FadeThanDoSomething()
+    IEnumerator FadeThenDoSomething()
     {
         yield return StartCoroutine(FadeCanvas(canvasGroup, 1f, 0f, fadeTime));
 
         //do something here
+
+        canvasGroup.gameObject.SetActive(false);
 
         ToActivateOnStart();
     }
@@ -94,14 +159,22 @@ public class UIManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         canvas.alpha = endAlpha;
-        canvas.gameObject.SetActive(false);
     }
 
     void ToActivateOnStart()
     {
         PauseMenu.SetActive(true);
+
+        player.GetComponent<SpriteRenderer>().enabled = true;
+        player.GetComponent<PlayerController>().enabled = true;
+        tar.SetActive(true);
     }
 
-   
+    private void OnDisable()
+    {
+        GameManager.instance.OnLevelCompletecallback -= OnLevelComplete;
+        GameManager.instance.OnGameOvercallback -= OnGameOver;
+    }
+
 
 }

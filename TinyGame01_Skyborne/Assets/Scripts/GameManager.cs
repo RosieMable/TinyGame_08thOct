@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,11 @@ public class GameManager : MonoBehaviour
 
     public enum Difficulty { Normal, Masochist }
     public Difficulty difficultySetting { get; set; }
+
+    public delegate void OnLevelComplete();
+    public OnLevelComplete OnLevelCompletecallback;
+    public delegate void OnGameOver();
+    public OnGameOver OnGameOvercallback;
 
     private void Awake()
     {
@@ -19,5 +25,17 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this); // Destroy this class, ensures that only 1 GameManager can exist in scene
         }
+    }
+
+    public void LevelComplete()
+    {
+        // Scene transition/UI overlay
+        OnLevelCompletecallback.Invoke();
+    }
+
+    public void GameOver()
+    {
+        // Scene transition/UI overlay
+        OnGameOvercallback.Invoke();       
     }
 }
