@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(AudioSource))]
 public abstract class NPC : MonoBehaviour
 {
     [SerializeField] protected float acceleration = 2;
@@ -14,11 +15,14 @@ public abstract class NPC : MonoBehaviour
     protected Rigidbody2D rigidBody;
     [SerializeField] private bool isStatic = false;
     protected int directionOfMovement = -1;
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip deathClip;
 
     // Awake is called before the object is drawn to the screen, runs before Start
     private void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
         xMovementDirection = Vector2.left;
     }
 
@@ -41,7 +45,12 @@ public abstract class NPC : MonoBehaviour
     /// </summary>
     public void Die()
     {
-        Destroy(gameObject); // Destroys the attached gameObject, may change later when animations are added.
+        audioSource.clip = deathClip;
+        audioSource.Play();
+
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponent<Collider2D>().enabled = false;
+        Destroy(gameObject, 2); // Destroys the attached gameObject, may change later when animations are added.
     }
 
     protected virtual void Move()

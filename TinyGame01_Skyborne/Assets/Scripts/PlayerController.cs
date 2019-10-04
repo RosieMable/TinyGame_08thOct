@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(AudioSource))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float maxSpeed = 5;
@@ -15,11 +17,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float jumpRaycastLength = 1;
     private Rigidbody2D rigidBody;
+    private Animator anim;
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip jumpClip;
+    private GameObject gameCamera;
 
     // Awake is called before the object is drawn to the screen, runs before Start
     private void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>(); // Store reference
+        anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
+        gameCamera = FindObjectOfType<Camera>().gameObject;
     }
 
     // Update is called once per frame
@@ -46,6 +55,8 @@ public class PlayerController : MonoBehaviour
             rigidBody.velocity = new Vector2(0, rigidBody.velocity.y); // Reset X velocity but maintain Y velocity incase the player is mid jump or falling
         }
 
+        anim.SetFloat("xVelocity", Mathf.Abs(rigidBody.velocity.x));
+        anim.SetFloat("yVelocity", rigidBody.velocity.y);
         ClampVelocity(); // Clamp velocity after any physics movement has occured to ensure velocity stays within bounds
     }
 
@@ -59,6 +70,19 @@ public class PlayerController : MonoBehaviour
                 Jump();
             }
         }
+
+        if (Input.GetKey(KeyCode.E))
+        {
+            // Scream + Camera Shake?
+            CameraShake();
+            anim.SetBool("IsScreaming", true);
+        }
+        else
+        {
+            anim.SetBool("IsScreaming", false);
+        }
+
+        anim.SetBool("IsGrounded", IsGrounded());
     }
 
     /// <summary>
@@ -69,7 +93,9 @@ public class PlayerController : MonoBehaviour
         if (IsGrounded()) // Check if we are grounded, if this returns true...
         {
             // Add upwards force based on 'JumpStrength', uses 'ForceMode2D.Impulse' as this applies the entirety of the force at once, which is what is wanted from a jump.
-            rigidBody.AddForce(new Vector2(0, jumpStrength), ForceMode2D.Impulse); 
+            rigidBody.AddForce(new Vector2(0, jumpStrength), ForceMode2D.Impulse);
+            audioSource.clip = jumpClip;
+            audioSource.Play();
         }
     }
 
@@ -109,6 +135,16 @@ public class PlayerController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    private void CameraShake()
+    {
+        Vector3 cameraOriginalPos = gameCamera.transform.localPosition;
+
+        float x = Random.Range(gameCamera.transform.position.x - 0.03f, gameCamera.transform.position.x + 0.03f);
+        float y = Random.Range(gameCamera.transform.position.y - 0.03f, gameCamera.transform.position.y + 0.03f);
+
+        gameCamera.transform.localPosition = new Vector3(x, y, cameraOriginalPos.z);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.GetComponent<NPC>()) // If the trigger area is an NPC...
@@ -118,6 +154,8 @@ public class PlayerController : MonoBehaviour
 
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0); // Reset y velocity
             rigidBody.AddForce(new Vector2(0, jumpStrength), ForceMode2D.Impulse); // Boost player upwards
+            audioSource.clip = jumpClip;
+            audioSource.Play();
         }
 
         if (collision.gameObject.GetComponent<Tar>()) // If the trigger area is the Tar...
