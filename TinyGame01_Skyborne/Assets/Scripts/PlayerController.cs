@@ -159,6 +159,8 @@ public class PlayerController : MonoBehaviour
             rigidBody.AddForce(new Vector2(0, jumpStrength), ForceMode2D.Impulse); // Boost player upwards
             audioSource.clip = jumpClip;
             audioSource.Play();
+
+            GameManager.instance.IncreaseScore();
         }
 
         if (collision.gameObject.GetComponent<Tar>()) // If the trigger area is the Tar...
