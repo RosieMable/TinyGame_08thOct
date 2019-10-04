@@ -120,7 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 5
   acceleration: 1
-  jumpStrength: 8
+  jumpStrength: 9.25
   jumpCooldown: 0.5
   groundLayer:
     serializedVersion: 2
