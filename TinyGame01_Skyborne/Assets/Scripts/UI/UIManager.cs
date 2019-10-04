@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour
 
 
         player = FindObjectOfType<PlayerController>().gameObject;
+        player.GetComponent<PlayerController>().enabled = false;
         tar = FindObjectOfType<Tar>().gameObject;
 
         canvasGroup = this.GetComponentInChildren<CanvasGroup>();
@@ -107,6 +108,7 @@ public class UIManager : MonoBehaviour
     public void OnRetry()
     {
         Application.LoadLevel(Application.loadedLevel);
+        player.GetComponent<PlayerController>().enabled = false;
     }
 
     void PauseGame()
@@ -164,6 +166,7 @@ public class UIManager : MonoBehaviour
         PauseMenu.SetActive(true);
 
         player.GetComponent<SpriteRenderer>().enabled = true;
+        player.GetComponent<PlayerController>().enabled = true;
         tar.SetActive(true);
     }
 
