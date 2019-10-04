@@ -29,6 +29,8 @@ public class UIManager : MonoBehaviour
     }
     private void Awake()
     {
+
+
         player = FindObjectOfType<PlayerController>().gameObject;
         tar = FindObjectOfType<Tar>().gameObject;
 
@@ -51,6 +53,12 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.P))
             OnPause();
+
+        if(GameManager.instance.OnGameOvercallback == null)
+            GameManager.instance.OnGameOvercallback += OnGameOver;
+
+        if(GameManager.instance.OnLevelCompletecallback == null)
+            GameManager.instance.OnLevelCompletecallback += OnLevelComplete;
     }
 
     public void OnStart()
@@ -94,6 +102,11 @@ public class UIManager : MonoBehaviour
         victoryScreen.interactable = true;
         StartCoroutine(FadeCanvas(victoryScreen, 0, 1, 0.6f));
         gameScene.SetActive(false);
+    }
+
+    public void OnRetry()
+    {
+        Application.LoadLevel(Application.loadedLevel);
     }
 
     void PauseGame()

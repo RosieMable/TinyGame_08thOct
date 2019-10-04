@@ -256,6 +256,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1393913299}
+        m_MethodName: FromStartToGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &26698886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4418,7 +4429,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 86524ecae18651445ab9e2eea2a85fe5, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 3dd2c4eec35181141b731f22507d3c81, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.05
   m_Pitch: 1
@@ -4580,6 +4591,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d6cc9caaf1882140b9560202eb126b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  mainMenu: {fileID: 8300000, guid: 3dd2c4eec35181141b731f22507d3c81, type: 3}
+  gameOver: {fileID: 8300000, guid: 9ae4aca86b4059647ac4be1a3b790354, type: 3}
+  gamePlay: {fileID: 8300000, guid: 86524ecae18651445ab9e2eea2a85fe5, type: 3}
+  victoryMusic: {fileID: 8300000, guid: 3f827b2f753d19d4c96f9bfe3c94d489, type: 3}
+  fadeTime: 0.2
+  player: {fileID: 0}
+  tar: {fileID: 0}
+  gamePlaying: 0
 --- !u!1001 &1419310261
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4916,7 +4936,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 144501048}
-        m_MethodName: OnQuit
+        m_MethodName: OnRetry
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1393913299}
+        m_MethodName: Retry
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
