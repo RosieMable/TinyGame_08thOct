@@ -36,7 +36,6 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         // Scene transition/UI overlay
-        OnGameOvercallback.Invoke();
-       
+        OnGameOvercallback.Invoke();       
     }
 }
