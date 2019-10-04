@@ -25,6 +25,11 @@ public class Checkpoint : MonoBehaviour
 
     public void PassedCheckpoint()
     {
+        if (tar == null)
+        {
+            tar = FindObjectOfType<Tar>();
+        }
+
         tar.Speed += tarSpeedIncrease; // Add onto Tar's speed
         gameObject.SetActive(false); // Deactivate object
     }

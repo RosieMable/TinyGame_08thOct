@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -29,8 +30,6 @@ public class UIManager : MonoBehaviour
     }
     private void Awake()
     {
-
-
         player = FindObjectOfType<PlayerController>().gameObject;
         player.GetComponent<PlayerController>().enabled = false;
         tar = FindObjectOfType<Tar>().gameObject;
@@ -107,7 +106,8 @@ public class UIManager : MonoBehaviour
 
     public void OnRetry()
     {
-        Application.LoadLevel(Application.loadedLevel);
+        //Application.LoadLevel(Application.loadedLevel); // - This is deprecated 
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         player.GetComponent<PlayerController>().enabled = false;
     }
 
