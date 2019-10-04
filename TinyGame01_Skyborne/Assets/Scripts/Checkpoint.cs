@@ -8,7 +8,7 @@ public class Checkpoint : MonoBehaviour
     private GameObject player;
     [SerializeField] private float tarSpeedIncrease;
 
-    private void Start()
+    private void Awake()
     {
         GetComponent<SpriteRenderer>().enabled = false; // Disable spriterender on play, allows setting up in scene view to be more intuiative        
         player = FindObjectOfType<PlayerController>().gameObject; // Finds reference to the player through finding which gameObject has the 'PlayerController' class attached. 

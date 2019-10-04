@@ -10,6 +10,11 @@ public class GameManager : MonoBehaviour
     public enum Difficulty { Normal, Masochist }
     public Difficulty difficultySetting { get; set; }
 
+    public delegate void OnLevelComplete();
+    public OnLevelComplete OnLevelCompletecallback;
+    public delegate void OnGameOver();
+    public OnGameOver OnGameOvercallback;
+
     private void Awake()
     {
         if (instance == null) // If instance does not exist...
@@ -25,12 +30,13 @@ public class GameManager : MonoBehaviour
     public void LevelComplete()
     {
         // Scene transition/UI overlay
+        OnLevelCompletecallback.Invoke();
     }
 
     public void GameOver()
     {
         // Scene transition/UI overlay
-
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Can be removed later, used primarily for testing right now
+        OnGameOvercallback.Invoke();
+       
     }
 }
