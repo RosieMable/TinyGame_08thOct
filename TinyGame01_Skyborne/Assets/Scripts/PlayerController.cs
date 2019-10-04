@@ -106,7 +106,7 @@ public class PlayerController : MonoBehaviour
     {
         // Overrides the players velocity if it is below the minimum, or above the maximum threshhold
         // Note: Negative values are used for the minimum as when traversing left along the X axis, velocity is negative to go 'backwards'
-        rigidBody.velocity = new Vector2(Mathf.Clamp(rigidBody.velocity.x, -maxSpeed, maxSpeed), Mathf.Clamp(rigidBody.velocity.y, -maxSpeed * 1.6f, maxSpeed * 1.6f));
+        rigidBody.velocity = new Vector2(Mathf.Clamp(rigidBody.velocity.x, -maxSpeed, maxSpeed), Mathf.Clamp(rigidBody.velocity.y, -jumpStrength, jumpStrength));
     }
 
     /// <summary>
