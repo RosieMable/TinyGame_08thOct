@@ -49,7 +49,8 @@ public abstract class NPC : MonoBehaviour
         audioSource.Play();
 
         GetComponent<SpriteRenderer>().enabled = false;
-        GetComponent<Collider2D>().enabled = false;
+        GetComponent<BoxCollider2D>().enabled = false;
+        GetComponent<CircleCollider2D>().enabled = false;
         Destroy(gameObject, 2); // Destroys the attached gameObject, may change later when animations are added.
     }
 

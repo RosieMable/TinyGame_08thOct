@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 7692970295925310596}
   - component: {fileID: 7692970295925310599}
   - component: {fileID: 7692970295925310598}
-  - component: {fileID: 7692970295925310595}
   - component: {fileID: 3380622380974100809}
   - component: {fileID: 5829777619231784640}
+  - component: {fileID: 599198482}
   m_Layer: 9
   m_Name: GroundBlob
   m_TagString: Untagged
@@ -130,7 +130,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   patrolPoints: []
-  isStatic: 1
+  isStatic: 0
   deathClip: {fileID: 8300000, guid: c8b7402714abc714fa2963714cac61a9, type: 3}
 --- !u!50 &7692970295925310598
 Rigidbody2D:
@@ -153,32 +153,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &7692970295925310595
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7692970295925310617}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.015288591, y: -0.14371166}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.15, y: 0.974}
-    newSize: {x: 5.75, y: 4.87}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.8381133, y: 0.344114}
-  m_EdgeRadius: 0
 --- !u!82 &3380622380974100809
 AudioSource:
   m_ObjectHideFlags: 0
@@ -294,3 +268,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!58 &599198482
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7692970295925310617}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.012485862, y: -0.09571755}
+  serializedVersion: 2
+  m_Radius: 0.16596639
