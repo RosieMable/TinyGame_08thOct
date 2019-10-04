@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,5 +20,17 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this); // Destroy this class, ensures that only 1 GameManager can exist in scene
         }
+    }
+
+    public void LevelComplete()
+    {
+        // Scene transition/overlay
+    }
+
+    public void GameOver()
+    {
+        // Scene transition/overlay
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Can be removed later, used primarily for testing right now
     }
 }

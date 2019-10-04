@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
@@ -131,8 +130,7 @@ public class PlayerController : MonoBehaviour
 
     private void Die()
     {
-        // TBD
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GameManager.instance.GameOver();
     }
 
     private void CameraShake()
@@ -143,6 +141,11 @@ public class PlayerController : MonoBehaviour
         float y = Random.Range(gameCamera.transform.position.y - 0.03f, gameCamera.transform.position.y + 0.03f);
 
         gameCamera.transform.localPosition = new Vector3(x, y, cameraOriginalPos.z);
+    }
+
+    private void FinishLevel()
+    {
+        GameManager.instance.LevelComplete();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -161,6 +164,11 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.GetComponent<Tar>()) // If the trigger area is the Tar...
         {
             Die();
+        }
+
+        if (collision.gameObject.layer == 10) // If the trigger area is the goal...
+        {
+            FinishLevel();
         }
     }
 
