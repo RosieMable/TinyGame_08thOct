@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private AudioSource audioSource;
     [SerializeField] private AudioClip jumpClip;
+    [SerializeField] private AudioClip screamClip;
     private GameObject gameCamera;
 
     // Awake is called before the object is drawn to the screen, runs before Start
@@ -75,9 +76,21 @@ public class PlayerController : MonoBehaviour
             // Scream + Camera Shake?
             CameraShake();
             anim.SetBool("IsScreaming", true);
+
+            audioSource.clip = screamClip;
+            audioSource.loop = true;
+            audioSource.pitch = 2;
+
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
         }
         else
         {
+            audioSource.Stop();
+            audioSource.pitch = 1;
+            audioSource.loop = false;
             anim.SetBool("IsScreaming", false);
         }
 
@@ -93,8 +106,12 @@ public class PlayerController : MonoBehaviour
         {
             // Add upwards force based on 'JumpStrength', uses 'ForceMode2D.Impulse' as this applies the entirety of the force at once, which is what is wanted from a jump.
             rigidBody.AddForce(new Vector2(0, jumpStrength), ForceMode2D.Impulse);
-            audioSource.clip = jumpClip;
-            audioSource.Play();
+
+            if (!audioSource.isPlaying)
+            {
+                audioSource.clip = jumpClip;
+                audioSource.Play();
+            }
         }
     }
 
@@ -157,8 +174,12 @@ public class PlayerController : MonoBehaviour
 
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0); // Reset y velocity
             rigidBody.AddForce(new Vector2(0, jumpStrength), ForceMode2D.Impulse); // Boost player upwards
-            audioSource.clip = jumpClip;
-            audioSource.Play();
+
+            if (!audioSource.isPlaying)
+            {
+                audioSource.clip = jumpClip;
+                audioSource.Play();
+            }
 
             GameManager.instance.IncreaseScore();
         }

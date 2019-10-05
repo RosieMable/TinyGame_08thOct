@@ -16,7 +16,7 @@ public abstract class NPC : MonoBehaviour
     [SerializeField] private bool isStatic = false;
     protected int directionOfMovement = -1;
     private AudioSource audioSource;
-    [SerializeField] private AudioClip deathClip;
+    [SerializeField] private AudioClip[] deathClips;
 
     // Awake is called before the object is drawn to the screen, runs before Start
     private void Awake()
@@ -45,7 +45,7 @@ public abstract class NPC : MonoBehaviour
     /// </summary>
     public void Die()
     {
-        audioSource.clip = deathClip;
+        audioSource.clip = deathClips[Random.Range(0, deathClips.Length)];
         audioSource.Play();
 
         GetComponent<SpriteRenderer>().enabled = false;
