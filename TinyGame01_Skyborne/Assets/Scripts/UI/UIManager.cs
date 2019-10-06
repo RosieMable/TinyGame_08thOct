@@ -53,12 +53,6 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.P))
             OnPause();
-
-        if(GameManager.instance.OnGameOvercallback == null)
-            GameManager.instance.OnGameOvercallback += OnGameOver;
-
-        if(GameManager.instance.OnLevelCompletecallback == null)
-            GameManager.instance.OnLevelCompletecallback += OnLevelComplete;
     }
 
     public void OnStart()
@@ -106,9 +100,14 @@ public class UIManager : MonoBehaviour
 
     public void OnRetry()
     {
-        //Application.LoadLevel(Application.loadedLevel); // - This is deprecated 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Application.LoadLevel(Application.loadedLevel);
         player.GetComponent<PlayerController>().enabled = false;
+
+        if (GameManager.instance.OnGameOvercallback == null)
+            GameManager.instance.OnGameOvercallback += OnGameOver;
+
+        if (GameManager.instance.OnLevelCompletecallback == null)
+            GameManager.instance.OnLevelCompletecallback += OnLevelComplete;
     }
 
     void PauseGame()
