@@ -112,14 +112,16 @@ public class UIManager : MonoBehaviour
 
     void PauseGame()
     {
-        if (paused == false)
+        if (paused == false && canvasGroup.gameObject.activeSelf == false)
         {
             Time.timeScale = 0f;
+            PauseMenu.SetActive(true);
             paused = true;
         }
         else
         {
             Time.timeScale = 1f;
+            PauseMenu.SetActive(false);
             paused = false;
         }
     }
@@ -162,8 +164,6 @@ public class UIManager : MonoBehaviour
 
     void ToActivateOnStart()
     {
-        PauseMenu.SetActive(true);
-
         player.GetComponent<SpriteRenderer>().enabled = true;
         player.GetComponent<PlayerController>().enabled = true;
         tar.SetActive(true);
