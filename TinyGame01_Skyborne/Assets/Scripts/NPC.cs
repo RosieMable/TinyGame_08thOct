@@ -17,12 +17,14 @@ public abstract class NPC : MonoBehaviour
     protected int directionOfMovement = -1;
     private AudioSource audioSource;
     [SerializeField] private AudioClip[] deathClips;
+    private Animator charAnim;
 
     // Awake is called before the object is drawn to the screen, runs before Start
     private void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
+        charAnim = GetComponent<Animator>();
         xMovementDirection = Vector2.left;
     }
 
@@ -48,10 +50,12 @@ public abstract class NPC : MonoBehaviour
         audioSource.clip = deathClips[Random.Range(0, deathClips.Length)];
         audioSource.Play();
 
-        GetComponent<SpriteRenderer>().enabled = false;
+        charAnim.SetBool("IsDead", true);
+        //GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<BoxCollider2D>().enabled = false;
+        rigidBody.isKinematic = true;
         GetComponent<CircleCollider2D>().enabled = false;
-        Destroy(gameObject, 2); // Destroys the attached gameObject, may change later when animations are added.
+        Destroy(gameObject, 0.6f); // Destroys the attached gameObject, may change later when animations are added.
     }
 
     protected virtual void Move()

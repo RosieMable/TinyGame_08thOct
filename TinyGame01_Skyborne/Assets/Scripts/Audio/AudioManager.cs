@@ -17,7 +17,7 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] bool gamePlaying = false;
 
-    private void Awake()
+    private void Start()
     {
         audioSource = GetComponentInChildren<AudioSource>();
         initialVolume = audioSource.volume;
