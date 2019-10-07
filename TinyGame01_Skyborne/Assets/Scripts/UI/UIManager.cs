@@ -58,6 +58,8 @@ public class UIManager : MonoBehaviour
     public void OnStart()
     {
         StartCoroutine(FadeThenDoSomething());
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void OnQuit()
@@ -87,6 +89,9 @@ public class UIManager : MonoBehaviour
         gameOverScreen.interactable = true;
         StartCoroutine(FadeCanvas(gameOverScreen, 0, 1, 0.6f));
         gameScene.SetActive(false);
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
     }
 

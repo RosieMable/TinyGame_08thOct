@@ -54,10 +54,16 @@ public abstract class NPC : MonoBehaviour
         //GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<BoxCollider2D>().enabled = false;
         rigidBody.isKinematic = true;
+        rigidBody.velocity = Vector2.zero;
         GetComponent<CircleCollider2D>().enabled = false;
-        Destroy(gameObject, 0.6f); // Destroys the attached gameObject, may change later when animations are added.
+        StartCoroutine(ToggleSpriterender(0.6f));
+        Destroy(gameObject, 2f); // Destroys the attached gameObject, may change later when animations are added.
     }
-
+    private IEnumerator ToggleSpriterender(float delay)
+    { 
+        yield return new WaitForSeconds(delay);
+        GetComponent<SpriteRenderer>().enabled = false;
+    }
     protected virtual void Move()
     {
         if (directionOfMovement == 1) // Rightwards movement
