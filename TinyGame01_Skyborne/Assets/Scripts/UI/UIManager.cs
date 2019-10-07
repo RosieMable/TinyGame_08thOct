@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
 
     public GameObject gameScene;
 
-    private void OnEnable()
+    private void Start()
     {
         GameManager.instance.OnLevelCompletecallback += OnLevelComplete;
         GameManager.instance.OnGameOvercallback += OnGameOver;
