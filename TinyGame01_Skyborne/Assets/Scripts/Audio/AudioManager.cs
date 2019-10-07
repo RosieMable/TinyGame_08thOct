@@ -17,7 +17,7 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] bool gamePlaying = false;
 
-    private void Awake()
+    private void Start()
     {
         audioSource = GetComponentInChildren<AudioSource>();
         initialVolume = audioSource.volume;
@@ -26,46 +26,18 @@ public class AudioManager : MonoBehaviour
 
 
         GameManager.instance.OnGameOvercallback += GameOverMusic;
+        GameManager.instance.OnLevelCompletecallback += VictoryMusic;
 
     }
 
-    void Start()
-    {
-
-       // StartCoroutine(AdjustVolume());
-
-    }
 
     private void Update()
     {
         if (GameManager.instance.OnGameOvercallback == null)
             GameManager.instance.OnGameOvercallback += GameOverMusic;
 
-    }
-
-    IEnumerator AdjustVolume()
-    {
-
-        while (gamePlaying == true)
-        {
-            tar = FindObjectOfType<Tar>().gameObject;
-
-            if (audioSource.isPlaying)
-            { // do this only if some audio is being played in this gameObject's AudioSource
-
-                float distanceToTarget = Vector3.Distance(player.transform.position, tar.transform.position); // Assuming that the target is the player or the audio listener
-
-                if (distanceToTarget < 1) { distanceToTarget = 1; }
-
-                audioSource.volume = 1 / distanceToTarget; // this works as a linear function, while the 3D sound works like a logarithmic function, so the effect will be a little different (correct me if I'm wrong)
-
-                yield return new WaitForSeconds(1); // this will adjust the volume based on distance every 1 second (Obviously, You can reduce this to a lower value if you want more updates per second)
-
-            }
-        }
-
-        audioSource.volume = initialVolume;
-
+        if (GameManager.instance.OnLevelCompletecallback == null)
+            GameManager.instance.OnLevelCompletecallback += VictoryMusic;
     }
 
     public void FromStartToGame()
@@ -83,6 +55,11 @@ public class AudioManager : MonoBehaviour
         StartCoroutine(ToGameOver());
     }
 
+    public void VictoryMusic()
+    {
+        StartCoroutine(ToVictory());
+    }
+
     IEnumerator FromMainMenuToGame()
     {
         yield return StartCoroutine(FadeAudio(audioSource, initialVolume, 0f, fadeTime, gamePlay));
@@ -96,18 +73,20 @@ public class AudioManager : MonoBehaviour
     {
         yield return StartCoroutine(FadeAudio(audioSource, initialVolume, 0f, fadeTime, mainMenu));
 
-        //do something here
-        gamePlaying = false;
     }
 
     IEnumerator ToGameOver()
     {
         yield return StartCoroutine(FadeAudio(audioSource, initialVolume, 0f, fadeTime, gameOver));
 
-        //do something here
-        gamePlaying = false;
 
     }
+
+    IEnumerator ToVictory()
+    {
+        yield return StartCoroutine(FadeAudio(audioSource, initialVolume, 0f, fadeTime, victoryMusic));
+    }
+
 
 
 
@@ -145,5 +124,6 @@ public class AudioManager : MonoBehaviour
     private void OnDisable()
     {
         GameManager.instance.OnGameOvercallback -= GameOverMusic;
+        GameManager.instance.OnLevelCompletecallback -= VictoryMusic;
     }
 }

@@ -147,7 +147,13 @@ MonoBehaviour:
     m_Bits: 0
   patrolPoints: []
   isStatic: 0
-  deathClip: {fileID: 8300000, guid: c8b7402714abc714fa2963714cac61a9, type: 3}
+  deathClips:
+  - {fileID: 8300000, guid: c735e0aff55ad62438474efbf390215a, type: 3}
+  - {fileID: 8300000, guid: 43c6c80460a7f0049929f4434a397f2d, type: 3}
+  - {fileID: 8300000, guid: 02b027ab9325159449a104ae802c849e, type: 3}
+  - {fileID: 8300000, guid: c536708ae1773d44c8e2a6784758da6f, type: 3}
+  - {fileID: 8300000, guid: e27502c4803ec0147aaab8dc36471b76, type: 3}
+  - {fileID: 8300000, guid: 2043a29c9497d4a40ba09f41fb6f01fc, type: 3}
 --- !u!50 &6696693480360131386
 Rigidbody2D:
   serializedVersion: 4
@@ -182,7 +188,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.1
-  m_Pitch: 1
+  m_Pitch: 2
   Loop: 0
   Mute: 0
   Spatialize: 0
@@ -190,9 +196,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 20
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -225,7 +231,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

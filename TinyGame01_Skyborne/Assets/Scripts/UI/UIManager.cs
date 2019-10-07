@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
 
     public GameObject gameScene;
 
-    private void OnEnable()
+    private void Start()
     {
         GameManager.instance.OnLevelCompletecallback += OnLevelComplete;
         GameManager.instance.OnGameOvercallback += OnGameOver;
@@ -53,17 +53,13 @@ public class UIManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.P))
             OnPause();
-
-        if(GameManager.instance.OnGameOvercallback == null)
-            GameManager.instance.OnGameOvercallback += OnGameOver;
-
-        if(GameManager.instance.OnLevelCompletecallback == null)
-            GameManager.instance.OnLevelCompletecallback += OnLevelComplete;
     }
 
     public void OnStart()
     {
         StartCoroutine(FadeThenDoSomething());
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void OnQuit()
@@ -94,6 +90,9 @@ public class UIManager : MonoBehaviour
         StartCoroutine(FadeCanvas(gameOverScreen, 0, 1, 0.6f));
         gameScene.SetActive(false);
 
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
     }
 
     public void OnLevelComplete()
@@ -106,21 +105,28 @@ public class UIManager : MonoBehaviour
 
     public void OnRetry()
     {
-        //Application.LoadLevel(Application.loadedLevel); // - This is deprecated 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Application.LoadLevel(Application.loadedLevel);
         player.GetComponent<PlayerController>().enabled = false;
+
+        if (GameManager.instance.OnGameOvercallback == null)
+            GameManager.instance.OnGameOvercallback += OnGameOver;
+
+        if (GameManager.instance.OnLevelCompletecallback == null)
+            GameManager.instance.OnLevelCompletecallback += OnLevelComplete;
     }
 
     void PauseGame()
     {
-        if (paused == false)
+        if (paused == false && canvasGroup.gameObject.activeSelf == false)
         {
             Time.timeScale = 0f;
+            PauseMenu.SetActive(true);
             paused = true;
         }
         else
         {
             Time.timeScale = 1f;
+            PauseMenu.SetActive(false);
             paused = false;
         }
     }
@@ -163,8 +169,6 @@ public class UIManager : MonoBehaviour
 
     void ToActivateOnStart()
     {
-        PauseMenu.SetActive(true);
-
         player.GetComponent<SpriteRenderer>().enabled = true;
         player.GetComponent<PlayerController>().enabled = true;
         tar.SetActive(true);

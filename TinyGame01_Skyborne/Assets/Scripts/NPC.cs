@@ -16,13 +16,15 @@ public abstract class NPC : MonoBehaviour
     [SerializeField] private bool isStatic = false;
     protected int directionOfMovement = -1;
     private AudioSource audioSource;
-    [SerializeField] private AudioClip deathClip;
+    [SerializeField] private AudioClip[] deathClips;
+    private Animator charAnim;
 
     // Awake is called before the object is drawn to the screen, runs before Start
     private void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
+        charAnim = GetComponent<Animator>();
         xMovementDirection = Vector2.left;
     }
 
@@ -45,15 +47,23 @@ public abstract class NPC : MonoBehaviour
     /// </summary>
     public void Die()
     {
-        audioSource.clip = deathClip;
+        audioSource.clip = deathClips[Random.Range(0, deathClips.Length)];
         audioSource.Play();
 
-        GetComponent<SpriteRenderer>().enabled = false;
+        charAnim.SetBool("IsDead", true);
+        //GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<BoxCollider2D>().enabled = false;
+        rigidBody.isKinematic = true;
+        rigidBody.velocity = Vector2.zero;
         GetComponent<CircleCollider2D>().enabled = false;
-        Destroy(gameObject, 2); // Destroys the attached gameObject, may change later when animations are added.
+        StartCoroutine(ToggleSpriterender(0.6f));
+        Destroy(gameObject, 2f); // Destroys the attached gameObject, may change later when animations are added.
     }
-
+    private IEnumerator ToggleSpriterender(float delay)
+    { 
+        yield return new WaitForSeconds(delay);
+        GetComponent<SpriteRenderer>().enabled = false;
+    }
     protected virtual void Move()
     {
         if (directionOfMovement == 1) // Rightwards movement
